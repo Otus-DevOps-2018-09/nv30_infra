@@ -1,8 +1,8 @@
 {
     "variables":
     {
-        "project_id": "",
-        "source_image_family": "",
+        "project_id": null,
+        "source_image_family": null,
         "machine_type": "f1-micro",
         "image_description": "Image for Reddit app",
         "disk_size": "10",
