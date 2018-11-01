@@ -1,7 +1,5 @@
 project			= "project_id"
 public_key_path		= "~/.ssh/appuser.pub"
-public_key_path1        = "~/.ssh/appuser1.pub"
-public_key_path2        = "~/.ssh/appuser2.pub"
 private_key_path	= "~/.ssh/appuser"
 disk_image		= "reddit-base"
-vm_count                = 2
+vm_count                = "2"
