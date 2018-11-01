@@ -28,7 +28,8 @@ resource "google_compute_instance" "app" {
 
   # ssh keys
   metadata {
-    ssh-keys = "appuser:${file(var.public_key_path)}"
+    ssh-keys               = "appuser:${file(var.public_key_path)}"
+    block-project-ssh-keys = false
   }
 
   connection {
@@ -65,4 +66,13 @@ resource "google_compute_firewall" "firewall_puma" {
 
   # rules will be applied to this tags
   target_tags = ["reddit-app"]
+}
+
+resource "google_compute_project_metadata" "ssh_userkeys" {
+  metadata {
+    ssh-keys = <<EOF
+appuser1:${file(var.public_key_path1)}
+appuser2:${file(var.public_key_path2)}
+EOF
+  }
 }
