@@ -23,8 +23,9 @@ resource "google_compute_instance" "app" {
     # set network for interface
     network = "default"
 
-    # set ephemeral external IP
-    access_config {}
+    access_config {
+      nat_ip = "${google_compute_address.app_ip.address}"
+    }
   }
 
   # ssh keys
@@ -70,8 +71,9 @@ resource "google_compute_firewall" "firewall_puma" {
 }
 
 resource "google_compute_firewall" "firewall_ssh" {
-  name    = "default-allow-ssh"
-  network = "default"
+  description = "Allow SSH from any network"
+  name        = "default-allow-ssh"
+  network     = "default"
 
   allow {
     protocol = "tcp"
@@ -88,4 +90,8 @@ appuser1:${file(var.public_key_path1)}
 appuser2:${file(var.public_key_path2)}
 EOF
   }
+}
+
+resource "google_compute_address" "app_ip" {
+  name = "reddit-app-ip"
 }
