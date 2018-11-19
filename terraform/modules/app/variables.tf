@@ -10,3 +10,8 @@ variable app_disk_image {
   description = "Disk image for reddit app"
   default     = "reddit-app-base"
 }
+
+variable machine_type {
+  description = "Machine type for reddit app instance"
+  default     = "g1-small"
+}
