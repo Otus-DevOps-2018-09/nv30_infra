@@ -15,3 +15,8 @@ variable machine_type {
   description = "Machine type for reddit app instance"
   default     = "g1-small"
 }
+
+variable env {
+  description = "Environment type"
+  default = ""
+}

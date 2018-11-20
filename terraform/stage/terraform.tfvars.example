@@ -3,3 +3,5 @@ public_key_path		= "~/.ssh/appuser.pub"
 private_key_path	= "~/.ssh/appuser"
 disk_image		= "reddit-base"
 vm_count		= 1
+env     = "environment_example"
+source_ip  = "0.0.0.0/0"
