@@ -18,6 +18,20 @@ resource "google_compute_instance" "db" {
   metadata {
     ssh-keys = "appuser:${file(var.public_key_path)}"
   }
+
+  connection {
+    type        = "ssh"
+    user        = "appuser"
+    agent       = false
+    private_key = "${file(var.private_key_path)}"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf",
+      "sudo systemctl restart mongod",
+    ]
+  }
 }
 
 resource "google_compute_firewall" "firewall_mongo" {
@@ -34,4 +48,9 @@ resource "google_compute_firewall" "firewall_mongo" {
 
   # порт будет доступен только для инстансов с тегом ...
   source_tags = ["reddit-app"]
+}
+
+resource "google_compute_address" "internal_ip" {
+  name         = "reddit-db-${var.env}-internal-ip"
+  address_type = "INTERNAL"
 }

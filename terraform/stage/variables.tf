@@ -45,5 +45,5 @@ variable source_ip {
 
 variable env {
   description = "Environment type"
-  default = ""
+  default     = ""
 }

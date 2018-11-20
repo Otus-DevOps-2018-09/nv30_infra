@@ -2,6 +2,10 @@ variable public_key_path {
   description = "Path to the public key used to connect to instance"
 }
 
+variable private_key_path {
+  description = "Path to the private key used by provisioners"
+}
+
 variable zone {
   description = "Zone"
 }
@@ -18,5 +22,9 @@ variable machine_type {
 
 variable env {
   description = "Environment type"
-  default = ""
+  default     = ""
+}
+
+variable database_ip {
+  description = "Internal IP of reddit-db instance"
 }
