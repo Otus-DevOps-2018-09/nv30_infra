@@ -45,5 +45,10 @@ variable source_ip {
 
 variable env {
   description = "Environment type"
-  default     = ""
+  default     = "prod"
+}
+
+variable deploy_app {
+  description = "True for deploy reddit-app and false for not"
+  default     = true
 }

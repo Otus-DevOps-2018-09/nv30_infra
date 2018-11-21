@@ -10,6 +10,10 @@ resource "google_compute_instance" "app" {
     }
   }
 
+  metadata {
+    ssh-keys = "appuser:${file(var.public_key_path)}"
+  }
+
   network_interface {
     network = "default"
 
@@ -17,13 +21,18 @@ resource "google_compute_instance" "app" {
       nat_ip = "${google_compute_address.app_ip.address}"
     }
   }
+}
 
-  metadata {
-    ssh-keys = "appuser:${file(var.public_key_path)}"
+resource "null_resource" "app" {
+  count = "${var.deploy_app}"
+
+  triggers {
+    build_number = "${timestamp()}"
   }
 
   connection {
     type        = "ssh"
+    host        = "${google_compute_address.app_ip.address}"
     user        = "appuser"
     agent       = false
     private_key = "${file(var.private_key_path)}"

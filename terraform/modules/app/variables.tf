@@ -28,3 +28,7 @@ variable env {
 variable database_ip {
   description = "Internal IP of reddit-db instance"
 }
+
+variable deploy_app {
+  description = "True for deploy reddit-app and false for not"
+}

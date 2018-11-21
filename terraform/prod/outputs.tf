@@ -6,6 +6,10 @@ output "db_internal_ip" {
   value = "${module.db.db_internal_ip}"
 }
 
+output "db_external_ip" {
+  value = "${module.db.db_external_ip}"
+}
+
 #output "app-lb_external_ip" {
 #  value = "${google_compute_global_forwarding_rule.forwarding.ip_address}"
 #}

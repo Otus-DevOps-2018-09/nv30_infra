@@ -24,3 +24,7 @@ variable env {
   description = "Environment type"
   default     = ""
 }
+
+variable deploy_app {
+  description = "True for deploy reddit-app and false for not"
+}

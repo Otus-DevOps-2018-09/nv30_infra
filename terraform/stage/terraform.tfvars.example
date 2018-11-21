@@ -5,3 +5,4 @@ disk_image		= "reddit-base"
 vm_count		= 1
 env     = "environment_example"
 source_ip  = "0.0.0.0/0"
+deploy_app = true

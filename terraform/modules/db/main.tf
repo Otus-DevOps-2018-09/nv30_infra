@@ -18,9 +18,18 @@ resource "google_compute_instance" "db" {
   metadata {
     ssh-keys = "appuser:${file(var.public_key_path)}"
   }
+}
+
+resource "null_resource" "db" {
+  count = "${var.deploy_app}"
+
+  triggers {
+    build_number = "${timestamp()}"
+  }
 
   connection {
     type        = "ssh"
+    host        = "${google_compute_instance.db.network_interface.0.access_config.0.nat_ip}"
     user        = "appuser"
     agent       = false
     private_key = "${file(var.private_key_path)}"

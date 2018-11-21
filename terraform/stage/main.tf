@@ -11,6 +11,7 @@ module "db" {
   zone             = "${var.zone}"
   db_disk_image    = "${var.db_disk_image}"
   env              = "${var.env}"
+  deploy_app       = "${var.deploy_app}"
 }
 
 module "app" {
@@ -21,6 +22,7 @@ module "app" {
   app_disk_image   = "${var.app_disk_image}"
   env              = "${var.env}"
   database_ip      = "${module.db.db_internal_ip}"
+  deploy_app       = "${var.deploy_app}"
 }
 
 module "vpc" {
