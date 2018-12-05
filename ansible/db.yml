@@ -1,6 +1,6 @@
 ---
 - name: Configure MongoDB
-  hosts: db
+  hosts: tag_items__u_reddit_db__
   become: true
   vars:
     mongo_bind_ip: 0.0.0.0

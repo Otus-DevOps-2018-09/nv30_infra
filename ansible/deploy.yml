@@ -1,5 +1,6 @@
+---
 - name: Deploy App
-  hosts: app
+  hosts: tag_items__u_reddit_app__
   tasks:
     - name: Fetch the latest version of application code
       git:
