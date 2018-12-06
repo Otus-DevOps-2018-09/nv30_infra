@@ -12,7 +12,7 @@ auth_kind: serviceaccount
 keyed_groups:
   # Create groups from GCE tags
   - prefix: tag
-    key: tags
+    key: tags['items']
 hostnames:
   # List host by name instead of the default public ip
   - name

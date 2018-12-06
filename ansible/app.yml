@@ -1,9 +1,9 @@
 ---
 - name: Configure App
-  hosts: tag_items__u_reddit_app__
+  hosts: tag_reddit_app
   become: true
   vars:
-   db_host: 10.132.0.3
+   db_host: "{{ hostvars['reddit-db-stage']['networkInterfaces'][0]['networkIP'] }}"
   tasks:
     - name: Add unit file for Puma
       copy:
