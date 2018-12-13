@@ -38,3 +38,17 @@ variable db_disk_image {
   description = "Disk image for reddit db"
   default     = "reddit-db-base"
 }
+
+variable source_ip {
+  description = "Source IP for firewall SSH rule"
+}
+
+variable env {
+  description = "Environment type"
+  default     = "stage"
+}
+
+variable deploy_app {
+  description = "True for deploy reddit-app and false for not"
+  default     = true
+}
