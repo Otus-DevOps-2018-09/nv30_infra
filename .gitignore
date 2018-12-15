@@ -7,3 +7,4 @@ packer/variables.json
 *.retry
 gcp_credentials.json
 jdauphant.nginx
+vault.key
