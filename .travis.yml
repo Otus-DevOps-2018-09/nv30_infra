@@ -1,9 +1,38 @@
 dist: trusty
 sudo: required
 language: bash
+
 before_install:
-- curl https://raw.githubusercontent.com/express42/otus-homeworks/2018-09/run.sh |
-  bash
+- curl https://raw.githubusercontent.com/express42/otus-homeworks/2018-09/run.sh | bash
+# Rename all .example files
+- find . -name "*.example" -exec bash -c 'mv "$1" "${1%.example}"' - '{}' \;
+# Create ssh-key for appuser
+- touch ~/.ssh/appuser && touch ~/.ssh/appuser.pub
+
+install:
+# Install ansible and ansible-lint
+- sudo pip install --upgrade pip
+- sudo pip install ansible ansible-lint
+# Install terraform
+- wget https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip -t 3
+- sudo unzip terraform_0.11.10_linux_amd64.zip -d /usr/local/bin
+- export PATH=/usr/local/bin:$PATH
+# Install tflint
+- wget https://github.com/wata727/tflint/releases/download/v0.7.2/tflint_linux_amd64.zip -t 3
+- unzip tflint_linux_amd64.zip
+- sudo mkdir -p /usr/local/tflint/bin
+- export PATH=/usr/local/tflint/bin:$PATH
+- sudo install tflint /usr/local/tflint/bin
+
+script:
+# Check packer templates
+- find packer -iname '*.json' -not -name variables.json -exec packer validate -var-file=packer/variables.json {} \;
+# Check terraform files
+- cd terraform/prod && terraform init -backend=false && terraform validate -var-file=terraform.tfvars && tflint
+- cd ../stage && terraform init -backend=false && terraform validate -var-file=terraform.tfvars && tflint
+# Check ansible playbooks
+- cd ../../ansible && ansible-lint playbooks/*.yml --exclude=roles/jdauphant.nginx
+
 notifications:
   slack:
     rooms:

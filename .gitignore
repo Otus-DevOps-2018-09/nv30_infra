@@ -6,3 +6,5 @@ packer/variables.json
 .terraform/
 *.retry
 gcp_credentials.json
+jdauphant.nginx
+vault.key
