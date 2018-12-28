@@ -45,6 +45,10 @@
       bundler:
         state: present
         chdir: /home/appuser/reddit
+      register: task_result
+      until: task_result is success
+      retries: 10
+      delay: 2
       tags: deploy-tag
 
   handlers:
