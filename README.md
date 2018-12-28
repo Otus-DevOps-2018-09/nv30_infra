@@ -1,6 +1,34 @@
 # nv30_infra
 nv30 Infra repository
 
+## Homework-11: [![Build Status](https://travis-ci.com/Otus-DevOps-2018-09/nv30_infra.svg?branch=ansible-4)](https://travis-ci.com/Otus-DevOps-2018-09/nv30_infra)
+
+ - На хост с Ubuntu 18.10 установлены Ansible, Vagrant, Molecule, Testinfra и VirtualBox, используя файл requirements.txt.
+ - Создан файл конфигурации Vagrant, где определены виртуальные машины app и db.
+ - В конфигурацию Vagrant добавлен провижининг для app и db, для чего понадобилось доработать ansible роли app и db, а также создать плейбук base.yml, для установки python. В доработку ролей входил перенос тасков из main.yml в отдельные файлы и добавления тегов к отдельным задачам внутри тасков, для возможности более гибкого использования получившихся ролей.
+ - Попутно проведена параметризация роли app, где появилась переменная deploy_user для указания пользователя для деплоя приложения.
+ - \*Для работы проксирования с помощью nginx в Vagrantfile в разделе **ansible.extra_vars** определена переменная **nginx_sites** с необходимыми параметрами:
+ <pre><code>  ansible.extra_vars = {
+    ...
+    &quot;nginx_sites&quot; =&gt; {
+      &quot;default&quot; =&gt; [
+        &quot;listen 80&quot;,
+        &quot;server_name 'reddit'&quot;,
+        &quot;location / { proxy_pass http://127.0.0.1:9292; }&quot;</code></pre>
+ - Создана заготовка для тестов роли db. Добавлены два тесты для проверки статуса службы mongod и наличия файла конфигурации MongoDB по пути "/etc/mongod.conf", в котором должен присутствовать параметр "bindIp: 0.0.0.0".
+ - Создана тестовая машина. На нее применен playbook.yml в котором вызывается роль db. Произведен прогон тестов (успешно).
+   - _Проблемы_: Molecule не могла запустить созданную машину, т.к. не могла получить доступ к директории "/usr". В ней она пыталась создать log файл о запуске машины, чтобы потом на него линковать serial и таким образом получать энтропию для "/dev/random". Первый вариант решения проблемы с отключением serial в конфигурации molecule.yml не помог. Машина запускалась, но загрузиться до конца так и не могла. Для быстрого решения проблемы создал log файл в папке "/usr" сам и дал на него права пользователю, от которого Molecula запускает Vagrant и создает виртуальную машину.
+ - Добавлен тест для проверки, что MongoDB слушает на порту 27017 по tcp со всех источников:
+  <pre><code>  def test_mongo_listening(host):
+    mongo_tcp = host.socket("tcp://0.0.0.0:27017")
+    assert mongo_tcp.is_listening</code></pre>
+ - В плейбуках packer_app.yml и packer_db.yml таски полностью заменены на ссылки на роли app и db. В шаблонах packer указаны теги, для запуска только нужных во время сборки образа задач.
+    - _Проблемы_: Билд packer падал, т.к. не видел ролей в папке ansible. Помогло указание пути к папке с ролями, используя соответствующие переменные:
+     <pre><code>  "ansible_env_vars": ["ANSIBLE_ROLES_PATH=ansible/roles"]</code></pre>
+ - \*Роль db вынесена в [отдельный репозиторий](https://github.com/nv30/db) и её подключение описано в файле requirements.yml обоих окружений.
+ - \*Для созданного репозитория [настроен и подключен Travis CI]( https://travis-ci.com/nv30/db/builds) и добавлен badge о статусе сборки.
+ - \*Новый репозиторий db и Travis CI для него, подключены к существующему чату Slack для отправки оповещений о коммитах и сборках.
+
 ## Homework-10: [![Build Status](https://travis-ci.com/Otus-DevOps-2018-09/nv30_infra.svg?branch=ansible-3)](https://travis-ci.com/Otus-DevOps-2018-09/nv30_infra)
 
  - Созданы заготовки для ролей app и db с помощью команды "ansible-galaxy init".
